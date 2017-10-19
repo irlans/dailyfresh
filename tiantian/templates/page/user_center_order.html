@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-用户中心</title>
+	<link rel="stylesheet" type="text/css" href="/static/page/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/page/css/main.css">
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				{% if request.session.username %}
+				<div class="login_info fl">
+					欢迎您：<em>{{ request.session.username }}</em>
+				</div>
+                    <div class="login_btn fl">
+                        <span>|</span>
+                        <a href="quite_login">退出</a>
+                    </div>
+                {% else %}
+				<div class="login_btn fl">
+					<a href="login">登录</a>
+					<span>|</span>
+					<a href="register">注册</a>
+				</div>
+                {% endif %}
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="/tiantian/user_center_info">用户中心</a>
+					<span>|</span>
+					<a href="/tiantian/cart">我的购物车</a>
+					<span>|</span>
+					<a href="/tiantian/user_center_order">我的订单</a>
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="/tiantian" class="logo fl"><img src="/static/page/img/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+		<div class="search_con fr">
+			<form action="/tiantian/find/1/1/1" method="get">
+                <input type="text" class="input_text fl" name="keyword" placeholder="搜索商品" {% if keyword %}value="{{ keyword }}{% endif %}">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+		    </form>
+		</div>		
+	</div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="/tiantian/user_center_info">· 个人信息</a></li>
+				<li><a href="/tiantian/user_center_order" class="active">· 全部订单</a></li>
+				<li><a href="/tiantian/user_center_site">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">全部订单</h3>
+                {% for order in page.object_list %}
+				<ul class="order_list_th w978 clearfix">
+					<li class="col01">{{ order.odate }}</li>
+					<li class="col02">订单号：{{ order.oid }}</li>
+                    {% if order.oispay == False %}
+					<li class="col02 stress">未支付</li>
+                    {% else %}
+                    <li class="col02 stress">已支付</li>
+                    {% endif %}
+				</ul>
+
+				<table class="order_list_table w980">
+					<tbody>
+						<tr>
+							<td width="55%">
+                                {% for detail in order.orderdetailinfo_set.all %}
+								<ul class="order_goods_list clearfix">					
+									<li class="col01"><img src="/static/page/{{ detail.goodsinfo.gpic }}"></li>
+									<li class="col02">{{ detail.goodsinfo.gtitle }}<em>{{ detail.goodsinfo.gprice }}元/{{ detail.goodsinfo.gunit }}</em></li>
+									<li class="col03">{{ detail.count }}</li>
+									<li class="col04">{{ detail.price }}</li>
+								</ul>
+                                {% endfor %}
+							</td>
+							<td width="15%">{{ order.ottotal }}元</td>
+                            {% if order.oispay == False %}
+							<td width="15%">待付款</td>
+							<td width="15%"><a href="/tiantian/pay{{ order.oid }}/" class="oper_btn">去付款</a></td>
+                            {% else %}
+                                <td width="15%">已付款</td>
+							    <td width="15%"><a href="#" class="oper_btn">查看物流</a></td>
+                            {% endif %}
+						</tr>
+					</tbody>
+				</table>
+				{% endfor %}
+
+
+
+				<div class="pagenation">
+                    {% if page.has_previous %}
+				<a href="/tiantian/order_show{{ page.previous_page_number }}/"><上一页</a>
+                {% endif %}
+
+                {% for i in paginator.page_range %}
+                    {% if page.number == i %}
+				    <a href="/tiantian/order_show{{ i }}/" class="active" onclick="return false;">{{ i }}</a>
+                        {% else %}
+                    <a href="/tiantian/order_show{{ i }}/">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page.has_next %}
+				<a href="/tiantian/order_show{{ page.next_page_number }}/">下一页></a>
+                {% endif %}
+				</div>
+		</div>
+	</div>
+
+
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+</body>
+</html>

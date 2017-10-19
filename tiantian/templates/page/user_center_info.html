@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-用户中心</title>
+	<link rel="stylesheet" type="text/css" href="/static/page/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/page/css/main.css">
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+                {% if request.session.username %}
+				<div class="login_info fl">
+					欢迎您：<em>{{ request.session.username }}</em>
+				</div>
+                    <div class="login_btn fl">
+                        <span>|</span>
+                        <a href="quite_login">退出</a>
+                    </div>
+                {% else %}
+				<div class="login_btn fl">
+					<a href="login">登录</a>
+					<span>|</span>
+					<a href="register">注册</a>
+				</div>
+                {% endif %}
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="user_center_info">用户中心</a>
+					<span>|</span>
+					<a href="cart">我的购物车</a>
+					<span>|</span>
+					<a href="user_center_order">我的订单</a>
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="/tiantian" class="logo fl"><img src="/static/page/img/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+		<div class="search_con fr">
+			<form action="/tiantian/find/1/1/1" method="get">
+                <input type="text" class="input_text fl" name="keyword" placeholder="搜索商品" {% if keyword %}value="{{ keyword }}{% endif %}">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+		    </form>
+		</div>		
+	</div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="/tiantian/user_center_info" class="active">· 个人信息</a></li>
+				<li><a href="/tiantian/user_center_order">· 全部订单</a></li>
+				<li><a href="/tiantian/user_center_site">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<div class="info_con clearfix">
+				<h3 class="common_title2">基本信息</h3>
+						<ul class="user_info_list">
+							<li>用户名：{{ username }}</li>
+							<li>联系方式：{{ uphone }}</li>
+							<li>联系地址：{{ uadress }}</li>
+						</ul>
+				</div>
+				
+				<h3 class="common_title2">最近浏览</h3>
+				<div class="has_view_list">
+                    <ul class="goods_type_list clearfix">
+                        {% for i in recentgoods %}
+                        <li>
+                            <a href="{{ i.id }}"><img src="/static/page/{{ i.gpic }}"></a>
+                            <h4><a href="{{ i.id }}">{{ i.gtitle }}</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥{{ i.gprice }}</span>
+                                <span class="unit">{{ i.gprice }}/{{ i.gunit }}</span>
+                                <a href="#" class="add_goods" title="加入购物车"></a>
+                            </div>
+                        </li>
+                        {% endfor %}
+			        </ul>
+                </div>
+        </div>
+    </div>
+
+
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+</body>
+</html>
